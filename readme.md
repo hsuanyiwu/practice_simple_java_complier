@@ -8,6 +8,8 @@
 
 實作文件 Modern Compiler Design Associated Supplemental Materials C Implementation Details 中的作業部份，作業己定義了程式的骨架，並指出我們應該作什麼。
 
+![image-20210925160701163](image\image-20210925160701163.png)
+
 
 
 ## Chapter 2
@@ -84,6 +86,8 @@ else    { return ELSE; }
   }
   
 ```
+
+<img src="image\image-20210925191553454.png" alt="image-20210925191553454"  />
 
 
 
