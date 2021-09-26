@@ -36,15 +36,20 @@
 #define RETURN 292
 #define NEW 293
 
+struct position {
+    int line_number;
+    int column_number;
+};
+
 typedef union { 
      struct {
-         int value;
-         int line_number;
+        int value;
+        struct position pos;
      } integer_value;
      struct {
-         char *value;
-         int line_number;
+        char *value;
+        struct position pos;
      } string_value;
-     int line_number;
+     struct position pos;
 } YYSTYPE;
 extern YYSTYPE yylval;

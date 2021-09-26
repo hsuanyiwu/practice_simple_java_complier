@@ -1,6 +1,6 @@
 #ifndef errors_h
 #define errors_h
-extern int Current_Line;
+extern int current_line;
 
 
 void Error(int position, char * message,...);

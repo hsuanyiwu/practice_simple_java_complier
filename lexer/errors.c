@@ -10,7 +10,7 @@
 
 int Number_Of_Errors = 0;
 
-int Current_Line = 1;
+int current_line = 1;
 
 void Error(int position, char *message,...)
 {va_list ap;

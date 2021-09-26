@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "tokens.h"
 #include "errors.h"
+#include <stdlib.h>
 
 extern FILE *yyin;
 YYSTYPE yylval;
@@ -37,17 +38,18 @@ int main(int argc, char **argv) {
      if (token==0) break;
      switch(token) {
      case IDENTIFIER: 
-       printf("line:%2d %15s  value = %s\n",
-	      yylval.string_value.line_number, tokenName(token),
-	      yylval.string_value.value);
+       printf("Ln:%2d Col:%2d %15s  value = %s\n",
+	      yylval.string_value.pos.line_number, yylval.string_value.pos.column_number,
+        tokenName(token), yylval.string_value.value);
        break;
      case INTEGER_LITERAL:
-       printf("line:%2d %15s  value = %d\n",
-	      yylval.integer_value.line_number,tokenName(token),
-	      yylval.integer_value.value);
+       printf("Ln:%2d Col:%2d %15s  value = %d\n",
+	      yylval.integer_value.pos.line_number, yylval.integer_value.pos.column_number,
+        tokenName(token), yylval.integer_value.value);
        break;
      default:
-       printf("line:%2d %15s\n",yylval.line_number,tokenName(token));
+       printf("Ln:%2d Col:%2d %15s\n",
+        yylval.pos.line_number, yylval.pos.column_number, tokenName(token));
      }
    }
  }
