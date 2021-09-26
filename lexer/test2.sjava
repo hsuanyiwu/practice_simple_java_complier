@@ -1,0 +1,12 @@
+/* /* Nested */ Comment /* test /* */ Test */ */
+int foo() {
+   return 4;
+}
+
+void main() {
+   int x;   /* nested /* comment */ here */
+   x = 3;  /*/*/*/*/*/*/* */*/*/*/*/*/*/
+   x = x + foo();
+   Print(x); /* more /* nested /* comments */ */ */
+}
+

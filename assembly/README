@@ -1,0 +1,71 @@
+* Copy sjava.lex, sjava.grm, and semantic.c from the previous project
+  into this directory
+
+* Modify AATBuildTree.c to build AATs
+
+* Modify testBuildTree.c so that it tests a wider range of
+  calls to AATBuildTree functions
+
+* Modify semantic.c to return an AAT
+
+* Compile and test with
+
+  %  make
+  %  ./testBT               (to test AATBuildTree functions)
+  %  ./a.out <filename>     (to test AAT generator)
+
+Included files:
+
+testBuildTree.c    Program to test AATBuildTree (includes main())
+                     (needs to be modified to expand test cases!)
+assemblytest.c     Program to to test assembly generation (includes main())
+
+semantic.c         Skeleton semantic.c file, to give some examples of building
+semantic.h           an AAT (DONT use this file:  modify your own semantic.c)
+
+AATBuildTree.c	   Skeleton AATBuildTree.c file -- modify to implement
+AATBuildTree.h        the interface in AATBuildTree.h
+
+AAT.c	           AAT defintion files
+AAT.h
+AATPrintTree.c     AAT printing files
+AATPrintTree.h
+AST.c              AST definition files
+AST.h
+ASTPrintTree.c     AST printing files
+ASTPrintTree.h
+
+MachineDependent.h Machine dependant constants
+
+errors.c          Error handling code
+errors.h
+
+
+environment.c     Defining Environments   
+environment.h
+environment1.h			   
+environment2.h
+hash.c            Hash table code
+hash.h               (Used in environments)  
+
+type.c            Code to define simpleJava types
+type.h
+
+label.c           Code to define assembly language labels
+label.h				   
+
+register.c        Register defintion file
+register.h			   
+
+makefile          Makefile
+
+test0.sjava       Sample simpleJava files
+test1.sjava
+test2.sjava			   
+test3.sjava
+test4.sjava			   
+test5.sjava
+test6.sjava			   
+test7.sjava
+gcd.sjava			   
+queens.sjava			   

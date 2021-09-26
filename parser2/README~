@@ -1,0 +1,12 @@
+* Copy sjava.lex and sjava.grm from previous project
+  into this directory
+* Modify sjava.grm so that it builds 
+
+AST.c				   AST.h
+ASTPrintTree.c			   ASTPrintTree.h
+errors.c			   errors.h
+gcd.sjava			   makefile
+parsetest2.c			   sjava.grm
+test1.sjava			   test2.sjava
+test3.sjava			   test4.sjava
+test5.sjava

@@ -1,0 +1,40 @@
+class C1 {
+  int w;
+  boolean z;
+}
+
+
+void bar(int x);
+
+void bar(boolean x) {  /*function doesn't match prototype */
+}
+
+int foo(int x, boolean y) {
+   int z;
+   return true;           /* return type doesn't match funtion def */
+}
+
+void main() {
+   int x;
+   boolean y[][];
+   C1 C;
+   C2 D;                  /* type C2 not defined */
+
+   z = 3;                 /* variable z not declared */
+   x = true;              /* type mismatch on assignment */
+   x = foo(3, 4);         /* parameter type mismatch */
+   x = foo(3);            /* not enough input paramters */
+   x = foo(3, true, 4);   /* too many input parameters */
+   foo(3,true);           /* function, not a procedure */
+   while (1) {            /* while test must be a boolean */
+     x.y = 3;             /* x is not a class variable */
+     y[2][3] = 4;         /* type mismatch:  y[2][3] is a boolean */
+     y[2] = true;         /* type mismatch: y[2] is boolean[] */     
+   }
+   x = 3 + true;          /* + requires integer operands */
+   C1.w = 2;              /* C1 is a class, not a vairable  */
+   C.x = 4;               /* x is not an instance variable of type C1 */
+   if (x || true)         /* both operands of || must be boolean */
+     x = (true  > false); /* operands of > must be integers */
+}
+

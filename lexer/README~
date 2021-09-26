@@ -1,0 +1,12 @@
+Inclided files:
+
+tokens.h
+
+errors.c			   
+errors.h
+main.c				   
+makefile
+sjava.lex			   
+test1.sjava
+test2.sjava			   
+test3.sjava

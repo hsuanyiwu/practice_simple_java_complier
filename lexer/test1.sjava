@@ -1,0 +1,12 @@
+/* Comment Test */
+int foo() {
+   return 4;
+}
+
+void main() {
+   int x;   /* comment */
+   x = 3;
+   x = x + foo();
+   Print(x);
+}
+

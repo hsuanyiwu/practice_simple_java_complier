@@ -1,0 +1,8 @@
+void main() {
+  int x;
+  x = Read();
+  Print(x);
+  Println();
+}
+
+

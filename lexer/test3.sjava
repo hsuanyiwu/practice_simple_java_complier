@@ -1,0 +1,9 @@
+/* Not a lega simpleJava program,
+   but a test of all tokens
+   (and tabs & multi-line comments -- make
+    sure your line numbers are correct! */
+	class do else true false for if while
+	return new + ++ -- - * / { } [ ] ( )
+	. , ; == != < > <= >= = && || ! 32 
+	foo
+	# /* bad token */

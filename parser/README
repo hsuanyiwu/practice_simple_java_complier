@@ -1,0 +1,23 @@
+* Copy sjava.lex from previous project into this directory
+
+* Modify sjava.grm to handle all of simpleJava
+
+* Compile & Test as follows:
+
+  %  make
+  % ./a.out <filename>
+
+Included files:
+
+parsetest.c    Testing program (includes main())
+sjava.grm      Skeleton .grm file			   
+
+errors.h       Error handling code
+errors.c		
+	   
+makefile       Makefile			   
+
+test1.sjava    Sample simpleJava programs
+test2.sjava			   
+test3.sjava
+test4.sjava

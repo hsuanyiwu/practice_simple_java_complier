@@ -1,0 +1,10 @@
+* Copy sjava.lex from previous project into this directory
+* Modify sjava.grm to handle all of simpleJava
+* 
+
+
+errors.c			   errors.h
+makefile			   parsetest.c
+sjava.grm			   test1.sjava
+test2.sjava			   test3.sjava
+test4.sjava

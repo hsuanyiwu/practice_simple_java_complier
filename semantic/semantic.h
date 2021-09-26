@@ -1,0 +1,1 @@
+void analyzeProgram(ASTprogram program);

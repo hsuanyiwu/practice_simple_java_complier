@@ -1,0 +1,23 @@
+class test {
+	int p;
+	boolean q;
+}
+
+void main() {
+   int x[];
+   int y[][];
+   int z[];
+   test w;
+
+   x = new int[4];
+   y = new int[3][];
+   z = x;
+   z = new int[3];
+
+   y[3][5] = 2;
+
+   w.p = 3;
+   w.q = false;
+}
+
+

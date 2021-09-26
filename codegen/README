@@ -1,0 +1,60 @@
+* Copy sjava.lex, sjava.grm, semantic.c, and AATBuildTree.c from 
+  the previous project into this directory
+
+* Modify codegen.c to generate MIPS code from the AAT
+
+* Compile and test with
+
+  %  make
+  %  ./sjc <filename>       generates <filename>.s
+
+Included files:
+
+sjc.c              Compiler main program (includes main())
+
+codegen.c          Skeleton code generator
+codegen.h
+
+semantic.h         Header files
+AATBuildTree.h       
+
+AAT.c	           AAT defintion files
+AAT.h
+AATPrintTree.c     AAT printing files
+AATPrintTree.h
+AST.c              AST definition files
+AST.h
+ASTPrintTree.c     AST printing files
+ASTPrintTree.h
+
+MachineDependent.h Machine dependant constants
+
+errors.c           Error handling code
+errors.h
+
+
+environment.c      Defining Environments   
+environment.h
+environment1.h			   
+environment2.h
+hash.c             Hash table code
+hash.h                (Used in environments)  
+
+type.c             Code to define simpleJava types
+type.h
+
+label.c            Code to define assembly language labels
+label.h				   
+
+register.c         Register defintion file
+register.h			   
+
+makefile           Makefile
+
+test0.sjava        Sample simpleJava files
+test1.sjava
+test2.sjava			   
+test3.sjava
+test4.sjava			   
+test5.sjava
+gcd.sjava			   

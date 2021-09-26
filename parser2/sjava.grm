@@ -1,0 +1,50 @@
+%{
+#include <stdio.h>
+#include "errors.h"  
+#include "AST.h"
+
+void yyerror(char *s) {
+    Error(Current_Line,"%s\n",s);  
+}
+%}
+
+%union { 
+     struct {
+         int value;
+         int line_number;
+     } integer_value;
+     struct {
+         char *value;
+         int line_number;
+     } string_value;
+     int line_number;
+
+     ASTprogram Aprogram;
+  /* add more types here ... */
+  
+}
+
+%token <string_value> IDENTIFIER
+%token <integer_value> INTEGER_LITERAL
+
+%token <line_number> CLASS DO ELSE TRUE FALSE FOR IF  WHILE PLUS 
+       MINUS MULTIPLY DIVIDE LBRACK RBRACK LBRACE
+       RBRACE LPAREN RPAREN DOT COMMA SEMICOLON
+       EQ NEQ LT GT LEQ GEQ GETS AND OR NOT PLUSPLUS
+       MINUSMINUS RETURN NEW
+       UMINUS UNOT
+
+%type <AclassList> classdefs
+%type <AfunctionDecList> functiondefs
+/* more $type's here */
+
+%start program
+
+%%
+
+program: classdefs functiondefs { ASTroot = ASTProgram(1, $1, $2); }
+
+ /* More rules here */
+
+
+

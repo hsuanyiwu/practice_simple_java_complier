@@ -1,0 +1,37 @@
+* Copy sjava.lex and sjava.grm from previous project
+  into this directory
+
+* Modify sjava.grm so that it builds an AST
+   (simple sample sjava.grm in this directory to 
+    give you some examples of how to build trees in 
+    a .grm file)
+
+* Compile and test with:
+
+  % make
+  % ./a.out <filename>
+
+Included files:
+
+parsetest2.c     Testing program (includes main())
+sjava.grm        Sample .grm file (DON'T USE THIS FILE:
+                   Modify sjava.grm from the last project.
+                   This file just gives you some pointers on
+                   how to modify your own sjava.grm)
+
+AST.c            AST definition files 
+AST.h
+ASTPrintTree.c   AST printing files			   
+ASTPrintTree.h
+
+errors.c         Error handling code
+errors.h
+
+makefile         Makefile
+
+test1.sjava      Sample simpleJava programs
+test2.sjava
+test3.sjava			   
+test4.sjava
+test5.sjava
+gcd.sjava        

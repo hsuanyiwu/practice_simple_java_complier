@@ -1,0 +1,33 @@
+* Copy sjava.lex, sjava.grm, semantic.c, and AATBuildTree.c from 
+  the previous project into this directory
+
+* Modify codegen.c to generate MIPS code from the AAT
+
+* Compile and test with
+
+  %  make
+  %  ./testBT               (to test AATBuildTree functions)
+  %  ./a.out <filename>     (to test AAT generator)
+
+Included files:
+
+AAT.h				   AATBuildTree.c
+AATBuildTree.h			   AATPrintTree.c
+AATPrintTree.h			   AST.c
+AST.h				   ASTPrintTree.c
+ASTPrintTree.h			   MachineDependent.h
+codegen.c			   codegen.h
+environment.c			   environment.h
+environment1.h			   environment2.h
+errors.c			   errors.h
+gcd.sjava			   hash.c
+hash.h				   label.c
+label.h				   makefile
+register.c			   register.h
+semantic.c			   semantic.h
+sjc.c				   symbol.h
+symbol2.h			   symboltableentry.h
+test0.sjava			   test1.sjava
+test2.sjava			   test3.sjava
+test4.sjava			   test5.sjava
+type.c				   type.h

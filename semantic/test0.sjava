@@ -1,0 +1,14 @@
+int foo(int x, int y);
+
+void main() {
+   int x;
+   x = 3;
+   x = x + foo(3,6);
+   Print(x);
+}
+
+int foo(int x, int y) {
+   return x + y;
+}
+
+

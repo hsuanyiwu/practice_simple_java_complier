@@ -1,0 +1,34 @@
+
+Included files:
+
+semantictest.c    Testing program (includes main())
+
+AST.c				   
+AST.h
+ASTPrintTree.c			   
+ASTPrintTree.h
+environment.c			   
+environment1.h
+environment2.h			   
+errors.c
+errors.h			   
+gcd.sjava
+hash.c				   
+hash.h
+makefile			   
+semantic.c			   
+semantic.h
+type.c
+type.h
+
+
+
+test0.sjava
+test1.sjava			   
+test2.sjava
+test3.sjava			   
+test4.sjava
+test5.sjava			   
+test6.sjava
+test7.sjava			   
+queens.sjava

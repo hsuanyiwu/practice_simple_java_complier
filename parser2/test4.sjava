@@ -1,0 +1,22 @@
+void main() {
+	int x[][] = new int[10][];
+	int i;
+	int j;
+	
+	for (i=0; i<10; i++) {
+            x[i] = new int[10];
+	    for (j=0;j<10;j++) {
+		x[i][j] = i*10 + j;
+	    }
+	}
+
+
+	for (i=0; i<10; i++) {
+	    for (j=0;j<10;j++) {
+		Print(x[i][j]);
+	    }
+	   Println();
+	}
+
+
+}

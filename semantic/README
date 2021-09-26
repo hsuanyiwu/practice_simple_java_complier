@@ -1,0 +1,46 @@
+* Copy sjava.lex and sjava.grm from the previous project
+  into this directory
+
+* Modify semantic.c to analyze the entire AST
+
+* Compile and test with
+
+  %  make
+  %  ./a.out <filename>
+
+Included files:
+
+semantictest.c    Testing program (includes main())
+
+semantic.c        Skeleton semantic.c file
+semantic.h           
+
+AST.c	          AST definition files
+AST.h
+ASTPrintTree.c    AST printing files			   
+ASTPrintTree.h
+
+errors.c          Error handling code
+errors.h			   
+
+environment.c     Defining Environments
+environment1.h
+environment2.h			   
+hash.c            Hash table code				   
+hash.h              (Used in environments)
+
+type.c            Code to define simpleJava types
+type.h
+
+makefile          Makefile
+
+test0.sjava       Sample simpleJava programs
+test1.sjava			   
+test2.sjava
+test3.sjava			   
+test4.sjava
+test5.sjava			   
+test6.sjava
+test7.sjava			   
+gcd.sjava
+queens.sjava

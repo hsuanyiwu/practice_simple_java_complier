@@ -1,0 +1,24 @@
+* Modify the file sjava.lex to handle all simpleJava
+  tokens
+
+* Compile & Test as follows:
+
+  %  make
+  % ./a.out <filename>
+
+
+Included files:
+
+main.c          Test driver program
+sjava.lex       Skeleton .lex file
+
+tokens.h        Token defintions
+
+errors.c        Error handling code
+errors.h
+
+makefile        Makefile
+
+test1.sjava    Sample simpleJava programs
+test2.sjava			   
+test3.sjava
