@@ -3,35 +3,37 @@
 #include "errors.h"
 #include "tokens.h"
 
-int current_colunm = 1;
-int current_length = 0;
+static int current_line = 1;
+static int current_colunm = 1;
+static int current_length = 0;
+static int comment=0;
   
 int yywrap(void) {
   return 1;
 }
 
-void newline() {
+static void newline() {
   current_line++;
   current_colunm = 1;
 }
 
-struct position _pos() {
+static struct position _pos() {
   struct position p = { current_line, current_colunm };
   current_length = strlen(yytext);
   current_colunm += current_length;
   return p;
 }
 
-void pos() {
+static void pos() {
   yylval.pos = _pos();
 }
 
-void val_int() {
+static void val_int() {
   yylval.integer_value.pos = _pos();  
   yylval.integer_value.value=atoi(yytext);
 }
 
-void val_str() {
+static void val_str() {
   yylval.string_value.pos = _pos();  
   yylval.string_value.value = malloc(current_length+1);
   strcpy(yylval.string_value.value, yytext);
@@ -39,9 +41,18 @@ void val_str() {
 
 %}
 
+%x COMMENT
+
 %%
 
+"/*"      { BEGIN(COMMENT); comment=1; }
+<COMMENT>"/*" { ++comment; }
+<COMMENT>"*/" { if(--comment==0) BEGIN(INITIAL); }
+<COMMENT>.    { }
+<COMMENT>\n   { newline(); }
+
 " "       { current_colunm+=1; }
+"\t"      { current_colunm+=4; }
 \n        { newline();}
 
 class     { pos(); return CLASS; }
@@ -53,6 +64,7 @@ for       { pos(); return FOR; }
 if        { pos(); return IF; }
 while     { pos(); return WHILE; }
 "+"       { pos(); return PLUS; }
+"-"       { pos(); return MINUS; }
 "*"       { pos(); return MULTIPLY; }
 "/"       { pos(); return DIVIDE; }
 "["       { pos(); return LBRACK; }
@@ -81,7 +93,7 @@ new       { pos(); return NEW; }
 
 [a-zA-Z_][a-zA-Z0-9_]*  { val_str(); return IDENTIFIER; }
 [0-9]+                  { val_int(); return INTEGER_LITERAL; }
-
+.         { current_colunm+=1;  }
 
 %%
 

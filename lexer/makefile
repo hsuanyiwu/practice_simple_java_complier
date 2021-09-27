@@ -11,7 +11,7 @@ lex.yy.o: lex.yy.c tokens.h
 	gcc -g -c lex.yy.c
 
 lex.yy.c: sjava.lex tokens.h
-	win_flex sjava.lex
+	lex sjava.lex
 
 clean:
 	rm -f a.out main.o lex.yy.o lex.yy.c errors.o
