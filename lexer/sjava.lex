@@ -1,11 +1,12 @@
 %{
 #include <string.h>
-#include "errors.h"
-#include "tokens.h"
+#include "..\errors.h"
+//#include "tokens.h"
+#include "y.tab.h"
 
-static int current_line = 1;
-static int current_colunm = 1;
-static int current_length = 0;
+int current_line = 1;
+int current_colunm = 1;
+int current_length = 0;
 static int comment=0;
   
 int yywrap(void) {
@@ -82,7 +83,7 @@ while     { pos(); return WHILE; }
 ">"       { pos(); return GT; }
 "<="      { pos(); return LEQ; }
 ">="      { pos(); return GEQ; }
-"="       { pos(); return GETS; }
+"="       { pos(); return ASSIGN; }
 "&&"      { pos(); return AND; }
 "||"      { pos(); return OR; }
 "!"       { pos(); return NOT; }
@@ -92,7 +93,7 @@ return    { pos(); return RETURN; }
 new       { pos(); return NEW; }
 
 [a-zA-Z_][a-zA-Z0-9_]*  { val_str(); return IDENTIFIER; }
-[0-9]+                  { val_int(); return INTEGER_LITERAL; }
+0|[1-9][0-9]*           { val_int(); return INTEGER_LITERAL; }
 .         { current_colunm+=1;  }
 
 %%

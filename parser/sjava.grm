@@ -1,38 +1,230 @@
 %{
 #include <stdio.h>
-#include "errors.h"  
+#include "..\errors.h"  
+
+extern int current_line;
+extern int current_colunm;
 
 void yyerror(char *s) {
-    Error(Current_Line,"%s\n",s);  
+    Error(current_line, current_colunm, " %s\n",s);  
 }
+
+int yylex(void);
+
 %}
 
 %union { 
      struct {
-         int value;
-         int line_number;
+        int value;
+        struct position pos;
      } integer_value;
      struct {
-         char *value;
-         int line_number;
+        char *value;
+        struct position pos;
      } string_value;
-     int line_number;
-
+     struct position pos;
 }
 
 %token <string_value> IDENTIFIER
 %token <integer_value> INTEGER_LITERAL
 
-%token <line_number> CLASS DO ELSE TRUE FALSE FOR IF  WHILE PLUS 
+%token <line_number> CLASS DO ELSE TRUE FALSE FOR IF WHILE PLUS 
        MINUS MULTIPLY DIVIDE LBRACK RBRACK LBRACE
        RBRACE LPAREN RPAREN DOT COMMA SEMICOLON
-       EQ NEQ LT GT LEQ GEQ GETS AND OR NOT PLUSPLUS
+       EQ NEQ LT GT LEQ GEQ ASSIGN AND OR NOT PLUSPLUS
        MINUSMINUS RETURN NEW
        UMINUS UNOT
+
+%right ASSIGN 
+%left OR
+%left AND
+%left EQ NEQ
+%left GT LT GEQ LEQ
+%left PLUS MINUS
+%left MULTIPLY DIVIDE
+%nonassoc UMINUS NOT
+%right PLUSPLUS MINUSMINUS
+
 
 %start program
 
 %%
 
-program:  /* yacc rules here */
+program
+: class_decl_list func_decl_list
+;
 
+class_decl_list
+: /* empty */
+| class_decl_list class_decl
+;
+
+class_decl
+/* class name { var_decls  } */
+: CLASS IDENTIFIER LBRACE var_decl_list RBRACE
+;
+
+var_decl_list
+: /* empty */
+| var_decl_list var_decl
+;
+
+var_decl
+/* type name */
+: type var_decl_id SEMICOLON
+;
+
+var_decl_id
+: IDENTIFIER
+| var_decl_id LBRACK RBRACK
+;
+
+type
+: IDENTIFIER
+;
+
+func_decl_list
+: /* empty */
+| func_decl_list func_decl
+;
+
+func_decl
+/* ret_type name ( params );  */
+: IDENTIFIER IDENTIFIER LPAREN formal_list RPAREN SEMICOLON
+/* ret_type name ( params ) { ... } */
+| IDENTIFIER IDENTIFIER LPAREN formal_list RPAREN stmt_block
+;
+
+formal_list
+: /* empty */
+| formal_list_1
+;
+
+formal_list_1
+: formal
+| formal_list_1 COMMA formal
+;
+
+formal
+: type var_decl_id
+;
+
+stmt
+/* branch */
+: stmt_if
+/* iteration */
+| stmt_for
+| stmt_while
+| stmt_do_while
+/* */
+| stmt_var_decl
+| stmt_block
+| RETURN expr SEMICOLON
+| expr SEMICOLON
+;
+
+identifier
+: identifier_1
+| identifier LBRACK expr RBRACK
+;
+
+identifier_1
+: IDENTIFIER
+| identifier_1 DOT IDENTIFIER
+;
+
+stmt_if
+/* shift-shift conflict */
+: IF LPAREN expr RPAREN stmt ELSE stmt
+| IF LPAREN expr RPAREN stmt
+;
+
+stmt_for
+: FOR LPAREN expr_list SEMICOLON expr SEMICOLON expr_list RPAREN stmt
+;
+
+stmt_while
+: WHILE LPAREN expr RPAREN stmt
+;
+
+stmt_do_while
+: DO LBRACE stmt RBRACE WHILE LPAREN expr RPAREN SEMICOLON
+;
+
+stmt_block
+: LBRACE stmt_list RBRACE
+;
+
+stmt_var_decl
+: type var_decl_id ASSIGN expr SEMICOLON
+| type var_decl_id SEMICOLON
+;
+
+stmt_list
+: /* empty */
+| stmt_list stmt
+;
+
+expr_list
+: /* empty */
+| expr_list_1
+;
+
+expr_list_1
+: expr
+| expr_list_1 COMMA expr
+;
+
+expr
+/* binary expression */
+/* assigment */
+: identifier ASSIGN expr
+/* logic or */
+| expr OR expr
+/* logic and */
+| expr AND expr
+/* equality */
+| expr EQ expr
+| expr NEQ expr
+/* relative */
+| expr LT expr
+| expr GT expr
+| expr LEQ expr
+| expr GEQ expr
+/* shift */
+/* addition */
+| expr PLUS expr
+| expr MINUS expr
+/* multiply */
+| expr MULTIPLY expr
+| expr DIVIDE expr
+/* unary */
+| MINUS expr        %prec UMINUS
+| NOT expr
+| PLUSPLUS expr
+| MINUSMINUS expr
+| expr PLUSPLUS
+| expr MINUSMINUS
+/* factor */
+| LPAREN expr RPAREN
+| INTEGER_LITERAL
+| identifier
+| expr_call
+| expr_new
+;
+
+expr_call
+: IDENTIFIER LPAREN expr_list RPAREN
+;
+
+expr_new
+/* new foo() */
+: NEW type LPAREN RPAREN
+/* new int[10][] */
+| NEW type LBRACK expr RBRACK new_array_opt
+; 
+
+new_array_opt
+: /* empty */
+| new_array_opt LBRACK RBRACK
+;

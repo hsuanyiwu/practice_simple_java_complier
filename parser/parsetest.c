@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "errors.h"
+#include <stdlib.h>
+#include "..\errors.h"
 
 extern int yyparse(void);
 extern FILE *yyin;
