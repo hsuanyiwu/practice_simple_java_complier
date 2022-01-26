@@ -264,6 +264,13 @@ void printStatement(int indent, ASTstatement statement) {
     printIndent(indent,statement->line);
     printf("EMPTY\n");
     break;
+  case ExprStm:
+    printIndent(indent, statement->line);
+    if(statement->u.exprStm.expr != NULL)
+      printExpression(indent+1, statement->u.exprStm.expr);
+    else
+      printf("<NONE>");
+    break;
   }
 }
 

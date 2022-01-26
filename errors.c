@@ -10,12 +10,10 @@
 
 int Number_Of_Errors = 0;
 
-int Current_Line = 1;
-
-void Error(int position, char *message,...)
+void Error(int line, int column, char *message,...)
 {va_list ap;
  Number_Of_Errors++;
- fprintf(stderr,"Error in line %d:", position);
+ fprintf(stderr,"Error in Ln:%2d Col:%2d", line, column);
  va_start(ap,message);
  vfprintf(stderr, message, ap);
  va_end(ap);

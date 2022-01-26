@@ -1,7 +1,8 @@
 #include <stdio.h>
-#include "errors.h"
+#include "..\errors.h"
 #include "AST.h"
 #include "ASTPrintTree.h"
+#include "stdlib.h"
 
 extern int yyparse(void);
 extern FILE *yyin;
@@ -12,6 +13,7 @@ ASTprogram parse(char *filename) {
     fprintf(stderr,"Cannot open file:%s\n",filename);
   }
   if  (yyin != NULL && yyparse() == 0)  { /* parsing worked */
+    printf("Parsing success\n");
     return ASTroot;
   } else { 
     fprintf(stderr,"Parsing failed\n");
@@ -28,8 +30,13 @@ int main(int argc, char **argv) {
  }
  program = parse(argv[1]);
  if (program != NULL) {
+   printf("print program:\n");
    printTree(program);
  }
+ else {
+   printf("program is NULL\n");
+ }
+
  return 0;
 }
 

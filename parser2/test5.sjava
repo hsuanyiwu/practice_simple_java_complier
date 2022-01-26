@@ -1,8 +1,36 @@
+class foo{
+   int a;
+   int b[];
+   int c[][];
+}
+
+class node
+{
+   int value;
+   node next;
+}
+
+node append_list(node head, int value)
+{
+   node n = new node();
+   n.value = value;
+   n.next = head;
+   return n;
+}
+
 int main() {
    int x[][];
+   int i;
 
    x = new int[3][];
 
+   foo f = new foo();
+   f.a = new int[10][];
+   for(i=0;i<10;++i)
+      f.a[i] = new int[100];
+
+   node head;
+   head = append_list(head, 10);
 }
 
 

@@ -1,50 +1,259 @@
 %{
 #include <stdio.h>
-#include "errors.h"  
-#include "AST.h"
+#include "ast.h"
+#include "..\errors.h"  
+
+extern int current_line;
+extern int current_colunm;
 
 void yyerror(char *s) {
-    Error(Current_Line,"%s\n",s);  
+    Error(current_line, current_colunm, " %s\n",s);  
 }
+
+int yylex(void);
+
 %}
 
 %union { 
-     struct {
-         int value;
-         int line_number;
-     } integer_value;
-     struct {
-         char *value;
-         int line_number;
-     } string_value;
-     int line_number;
+   struct {
+      int value;
+      struct position pos;
+   } integer_value;
 
-     ASTprogram Aprogram;
-  /* add more types here ... */
-  
+   struct {
+      char *value;
+      struct position pos;
+   } string_value;
+
+   ASTprogram prog;
+
+   // class 
+   ASTclassList class_list;
+   ASTclass class_decl;
+   ASTinstanceVarDec instance_decl;
+   ASTinstanceVarDecList instance_decl_list;
+   
+   // function
+   ASTfunctionDecList func_decl_list;
+   ASTfunctionDec func_decl;
+   ASTformal formal;
+   ASTformalList formal_list;
+   
+   // statement
+   ASTstatement stmt;
+   ASTstatementList stmt_list;
+
+   ASTvariable identifier;
+
+
+   ASTexpression expr;
+   ASTexpressionList expr_list;
+
+   int array_dim;
+   struct position pos;
 }
 
 %token <string_value> IDENTIFIER
 %token <integer_value> INTEGER_LITERAL
 
-%token <line_number> CLASS DO ELSE TRUE FALSE FOR IF  WHILE PLUS 
+%token <line_number> CLASS DO ELSE TRUE FALSE FOR IF WHILE PLUS 
        MINUS MULTIPLY DIVIDE LBRACK RBRACK LBRACE
        RBRACE LPAREN RPAREN DOT COMMA SEMICOLON
-       EQ NEQ LT GT LEQ GEQ GETS AND OR NOT PLUSPLUS
+       EQ NEQ LT GT LEQ GEQ ASSIGN AND OR NOT PLUSPLUS
        MINUSMINUS RETURN NEW
        UMINUS UNOT
 
-%type <AclassList> classdefs
-%type <AfunctionDecList> functiondefs
-/* more $type's here */
+%right ASSIGN 
+%left OR
+%left AND
+%left EQ NEQ
+%left GT LT GEQ LEQ
+%left PLUS MINUS
+%left MULTIPLY DIVIDE
+%nonassoc UMINUS UNOT
+%right PLUSPLUS MINUSMINUS
+
+%type <prog> program
+
+%type <class_list> class_decl_list
+%type <class_decl> class_decl
+%type <instance_decl_list> instance_decl_list
+%type <instance_decl> instance_decl
+%type <func_decl_list> func_decl_list
+%type <func_decl> func_decl
+%type <formal_list> formal_list formal_list_1
+%type <formal> formal
+
+%type <stmt> stmt stmt_block
+%type <stmt_list> stmt_list
+
+%type <expr> expr expr_new expr_call stmt_var_init
+%type <expr_list> expr_list expr_list_1
+
+%type <identifier> identifier identifier_1
+%type <array_dim> array_dim
+%type <string_value> type
 
 %start program
 
 %%
 
-program: classdefs functiondefs { ASTroot = ASTProgram(1, $1, $2); }
+program
+: class_decl_list func_decl_list { ASTroot = ASTProgram(0, $1, $2); }
+;
 
- /* More rules here */
+class_decl_list
+: /* empty */ { $$ = NULL; }
+| class_decl_list class_decl { $$ = ASTClassList(0,$2,$1); }
+;
 
+class_decl
+: CLASS IDENTIFIER LBRACE instance_decl_list RBRACE {
+   $$ = ASTClass(0,$2.value,$4);
+}
+;
 
+instance_decl_list
+: /* empty */ { $$ = NULL; }
+| instance_decl_list instance_decl { $$ = ASTInstanceVarDecList(0,$2,$1); }
+;
 
+instance_decl
+: type IDENTIFIER array_dim SEMICOLON { $$ = ASTInstanceVarDec(0,$1.value,$2.value,$3); }
+;
+
+array_dim
+: /* empty */ { $$ = 0; }
+| array_dim LBRACK RBRACK { $$ = $1+1; }
+;
+
+type
+: IDENTIFIER
+;
+
+func_decl_list
+: /* empty */ { $$ = NULL; }
+| func_decl_list func_decl { $$ = ASTFunctionDecList(0,$2,$1); }
+;
+
+func_decl
+/* ret_type name ( params );  */
+: type IDENTIFIER LPAREN formal_list RPAREN SEMICOLON { $$ = ASTPrototype(0,$1.value,$2.value,$4); }
+/* ret_type name ( params ) { ... } */
+| type IDENTIFIER LPAREN formal_list RPAREN LBRACE stmt_list RBRACE { $$ = ASTFunctionDef(0,$1.value,$2.value,$4,$7); }
+;
+
+formal_list
+: /* empty */   { $$=NULL; }
+| formal_list_1 
+;
+
+formal_list_1
+: formal { $$ = ASTFormalList(0,$1,NULL); }
+| formal_list_1 COMMA formal { $$ = ASTFormalList(0,$3,$1); }
+;
+
+formal
+: type IDENTIFIER array_dim { $$ = ASTFormal(0,$1.value,$2.value,$3); }
+;
+
+stmt
+/* assigment */
+: identifier ASSIGN expr { $$ = ASTAssignStm(0,$1,$3); }
+/* branch */
+| IF LPAREN expr RPAREN stmt ELSE stmt  { $$ = ASTIfStm(0,$3,$5,$7); }
+| IF LPAREN expr RPAREN stmt            { $$ = ASTIfStm(0,$3,$5,NULL); }
+/* iteration */
+| FOR LPAREN stmt SEMICOLON expr SEMICOLON expr RPAREN stmt { ASTstatement inc = ASTExpressionStm(0,$7); $$ = ASTForStm(0,$3,$5,inc,$9); }
+| WHILE LPAREN expr RPAREN stmt { $$ = ASTWhileStm(0,$3,$5); }
+| DO LBRACE stmt RBRACE WHILE LPAREN expr RPAREN SEMICOLON { $$ = ASTDoWhileStm(0,$7,$3); }
+/* */
+| type IDENTIFIER array_dim stmt_var_init SEMICOLON { $$ = ASTVarDecStm(0,$1.value,$2.value,$3,$4); }
+| stmt_block
+| IDENTIFIER LPAREN expr_list RPAREN SEMICOLON { $$ = ASTCallStm(0,$1.value,$3); }
+| RETURN expr SEMICOLON { $$ = ASTReturnStm(0,$2); }
+| expr SEMICOLON { $$ = ASTExpressionStm(0,$1); }
+| SEMICOLON { $$ = ASTEmptyStm(0); }
+;
+
+identifier
+: identifier_1
+| identifier LBRACK expr RBRACK { $$ = ASTArrayVar(0,$1,$3); }
+;
+
+identifier_1
+: IDENTIFIER { $$ = ASTBaseVar(0,$1.value); }
+| identifier_1 DOT IDENTIFIER { $$ = ASTClassVar(0,$1,$3.value); }
+;
+
+stmt_block
+: LBRACE stmt_list RBRACE { $$ = ASTBlockStm(0,$2); } 
+;
+
+stmt_var_init
+: /* empty */ { $$ = NULL; }
+| ASSIGN expr { $$ = $2; }
+;
+
+stmt_list
+: /* empty */ {$$ = NULL; }
+| stmt_list stmt { $$ = ASTStatementList(0,$2,$1); }
+;
+
+expr_list
+: /* empty */ { $$ = NULL; }
+| expr_list_1
+;
+
+expr_list_1
+: expr { $$ = ASTExpressionList(0,$1,NULL); }
+| expr_list_1 COMMA expr { $$ = ASTExpressionList(0,$3,$1); }
+;
+
+expr
+/* binary expression */
+: expr OR expr    { $$ = ASTOpExp(0,AST_OR,$1,$3); }
+/* logic and */
+| expr AND expr   { $$ = ASTOpExp(0,AST_AND,$1,$3); }
+/* equality */
+| expr EQ expr    { $$ = ASTOpExp(0,AST_EQ,$1,$3); }
+| expr NEQ expr   { $$ = ASTOpExp(0,AST_NEQ,$1,$3); }
+/* relative */
+| expr LT expr    { $$ = ASTOpExp(0,AST_LT,$1,$3); }
+| expr GT expr    { $$ = ASTOpExp(0,AST_GT,$1,$3); }
+| expr LEQ expr   { $$ = ASTOpExp(0,AST_LEQ,$1,$3); }
+| expr GEQ expr   { $$ = ASTOpExp(0,AST_GEQ,$1,$3); }
+/* shift */
+/* addition */
+| expr PLUS expr  { $$ = ASTOpExp(0,AST_PLUS,$1,$3); }
+| expr MINUS expr { $$ = ASTOpExp(0,AST_MINUS,$1,$3); }
+/* multiply */
+| expr MULTIPLY expr { $$ = ASTOpExp(0,AST_MULTIPLY,$1,$3); }
+| expr DIVIDE expr   { $$ = ASTOpExp(0,AST_DIVIDE,$1,$3); }
+/* unary */
+| MINUS expr        %prec UMINUS {  }
+| NOT expr          %prec UNOT   {  }
+| PLUSPLUS expr                  {  }
+| MINUSMINUS expr                {  }
+| expr PLUSPLUS                  {  }
+| expr MINUSMINUS                {  }
+/* factor */
+| LPAREN expr RPAREN { $$ = $2; }
+| identifier      { $$ = ASTVarExp(0,$1); }
+| expr_call
+| expr_new
+| INTEGER_LITERAL { $$ = ASTIntLiteralExp(0,$1.value); } 
+| TRUE            { $$ = ASTBoolLiteralExp(0,1); } 
+| FALSE           { $$ = ASTBoolLiteralExp(0,0); }  
+;
+
+expr_call
+: IDENTIFIER LPAREN expr_list RPAREN { $$ = ASTCallExp(0,$1.value,$3); }
+;
+
+expr_new
+/* new foo() */
+: NEW type LPAREN RPAREN { $$ = ASTNewExp(0,$2.value); }
+/* new int[10][] */
+| NEW type LBRACK expr RBRACK array_dim { $$ = ASTNewArrayExp(0,$2.value,$4,$6); }
+; 

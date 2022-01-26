@@ -9,7 +9,8 @@ int main() {
    n1 = readint();
    n2 = readint();
    result = GCD(n1,n2);
-   writelnint(result);
+
+   writeline(result);
 }
 
 int mod(int x, int y) {

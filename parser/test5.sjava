@@ -1,0 +1,50 @@
+class foo
+{
+    int i,j,k;
+    int a;
+    int b;
+    foo f;
+    int c[][];
+    int d[];
+}
+
+int fun(int a[], int b[][]);
+int fun2(int a);
+int fun3(int a, int b);
+
+int fun4(int a, int b, int c[])
+{
+
+}
+
+int test_stmt()
+{
+    a;
+    f();
+    f(1);
+    f(1, a.b.c, b(c[0]));
+    a=b=10;
+    int a;
+    int b[];
+    int c[][];
+    int d[] = new int[10];
+    int a,b[]=new int[0],c=10;
+    int i=0,j=1,k=2;
+}
+
+int main()
+{
+    
+
+    if(1)
+        a;
+
+    if(0){ } 
+
+    if(a)
+        b;
+    else
+        c;
+
+    return 0;
+}

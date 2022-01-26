@@ -2,6 +2,7 @@
 #include <string.h>
 #include "..\errors.h"
 //#include "tokens.h"
+#include "ast.h"
 #include "y.tab.h"
 
 int current_line = 1;

@@ -7,23 +7,23 @@ AST.o: AST.h AST.c
 ASTPrintTree.o: ASTPrintTree.c ASTPrintTree.h
 	gcc -c ASTPrintTree.c
 
-errors.o: errors.c errors.h
-	gcc -c errors.c
+errors.o: ..\errors.c ..\errors.h
+	gcc -c ..\errors.c
 
 y.tab.o: y.tab.h y.tab.c
 	gcc -c y.tab.c
 
-parsetest2.o: parsetest2.c y.tab.h AST.h errors.h
+parsetest2.o: parsetest2.c y.tab.h AST.h ..\errors.h
 	gcc -c parsetest2.c
 
 lex.yy.o: lex.yy.c y.tab.h
 	gcc -c lex.yy.c
 
 y.tab.h: sjava.grm
-	yacc -dv sjava.grm
+	yacc -ydv sjava.grm
 
 y.tab.c: sjava.grm
-	yacc -dv sjava.grm
+	yacc -ydv sjava.grm
 
 lex.yy.c: sjava.lex y.tab.h
 	lex sjava.lex

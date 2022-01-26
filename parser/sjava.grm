@@ -42,7 +42,7 @@ int yylex(void);
 %left GT LT GEQ LEQ
 %left PLUS MINUS
 %left MULTIPLY DIVIDE
-%nonassoc UMINUS NOT
+%nonassoc UMINUS UNOT
 %right PLUSPLUS MINUSMINUS
 
 
@@ -71,7 +71,12 @@ var_decl_list
 
 var_decl
 /* type name */
-: type var_decl_id SEMICOLON
+: type var_decl_id_list_1 SEMICOLON
+;
+
+var_decl_id_list_1
+: var_decl_id
+| var_decl_id_list_1 COMMA var_decl_id
 ;
 
 var_decl_id
@@ -117,7 +122,7 @@ stmt
 | stmt_while
 | stmt_do_while
 /* */
-| stmt_var_decl
+| stmt_var_decl SEMICOLON
 | stmt_block
 | RETURN expr SEMICOLON
 | expr SEMICOLON
@@ -156,8 +161,17 @@ stmt_block
 ;
 
 stmt_var_decl
-: type var_decl_id ASSIGN expr SEMICOLON
-| type var_decl_id SEMICOLON
+: type stmt_var_decl_list_1
+;
+
+stmt_var_decl_list_1
+: stmt_var_decl_id
+| stmt_var_decl_list_1 COMMA stmt_var_decl_id
+;
+
+stmt_var_decl_id
+: var_decl_id
+| var_decl_id ASSIGN expr
 ;
 
 stmt_list
@@ -207,10 +221,12 @@ expr
 | expr MINUSMINUS
 /* factor */
 | LPAREN expr RPAREN
-| INTEGER_LITERAL
 | identifier
 | expr_call
 | expr_new
+| INTEGER_LITERAL
+| TRUE
+| FALSE
 ;
 
 expr_call
